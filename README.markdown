@@ -46,3 +46,8 @@ And process it with this method:
 	- (void)fileUploadManagerDidChange:(DCFileUploadManager *)theManager {
 		var fileUploads = [theManager fileUploads];
 	}
+
+
+## Attribution
+
+This technique is based on code from [CSS Ninja](http://www.thecssninja.com/javascript/gmail-upload).
