@@ -1,36 +1,48 @@
-DCFileDropUpload
+Deep Drop Upload
 ==========
 
-EKActivityIndicatorView is a class for displaying those "here spins something the app isn't crashed"-wheels for the [Cappuccino](http://www.cappuccino.org) framework.
+[Example](http://davidcann.com/deepDropUpload/index.html)
 
-It works completely without images by drawing the animation with CoreGraphics. This guarantees a stunning performance and the ability of setting the view's size and color with ease. All this is brought to you by a 3.5 KB file.
+These classes allow you to turn any CPView in a [Cappuccino](http://github.com/280North/cappuccino) app into a file upload drop zone.  It supports multiple files dropped at once.  It works in Safari and Chrome.  Firefox support is possible, but hasn't been added.
 
-Click here to see a [DEMO](http://elias.klughammer.com/EKActivityIndicatorView/)
+The most useful classes are:
 
-
-## Installation
-
-Simply import the file in your application's AppController or any other class:
-
-	@import "EKActivityIndicatorView.j"
+* DCFileDropController.j
+* DCFileUploadManager.j
+* DCFileUpload.j
 
 
 ## Usage
 
-Inserting an EKActivityIndicatorView in your application is dead simple:
+Import these classes:
 
-	var spinner = [[EKActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 24, 24)];
-	
-Set your favorite color:
-	
-	[spinner setColor:[CPColor someColor]];
+	@import "DCFileDropController.j"
+	@import "DCFileUploadManager.j"
 
-Start the animation:
+Apply a DCFileDropController to any CPView:
 
-	[spinner startAnimating];
+	var fileDropUploadController = [[DCFileDropController alloc] 
+		initWithView:anyView 
+		dropDelegate:self 
+		uploadURL:[CPURL URLWithString:@"upload.php"] 
+		uploadManager:[DCFileUploadManager sharedManager]];
 
-And if you have enough, stop it:
+If you want to change visual state of the view, you can do that with this dropDelegate method:
 
-	[spinner stopAnimating];
+	- (void)fileDropUploadController:(DCFileDropController *)theController setState:(BOOL)visible {
+		if (visible) {
+			[theController.view setBackgroundColor:[CPColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.2]];
+		} else {
+			[theController.view setBackgroundColor:[CPColor clearColor]];
+		}
+	}
 
+If you want to display progress, you can set the DCFileUploadManager delegate:
 
+	[[DCFileUploadManager sharedManager] setDelegate:uploadsPanel];
+
+And process it with this method:
+
+	- (void)fileUploadManagerDidChange:(DCFileUploadManager *)theManager {
+		var fileUploads = [theManager fileUploads];
+	}
