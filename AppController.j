@@ -70,7 +70,7 @@
 
 // ******************** DCFileDropControllerDropDelegate *********************
 
-- (void)fileDropUploadController:(DCFileDropController *)theController setState:(BOOL)visible {
+- (void)fileDropUploadController:(DCFileDropController)theController setState:(BOOL)visible {
 	if (visible) {
 		[theController.view setBackgroundColor:[CPColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.2]];
 	} else {

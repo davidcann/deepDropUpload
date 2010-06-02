@@ -55,7 +55,7 @@
 	return self;
 }
 
-- (void)fileUploadManagerDidChange:(DCFileUploadManager *)theManager {
+- (void)fileUploadManagerDidChange:(DCFileUploadManager)theManager {
 	[tableView reloadData];
 	[[CPRunLoop currentRunLoop] limitDateForMode:CPDefaultRunLoopMode];
 }

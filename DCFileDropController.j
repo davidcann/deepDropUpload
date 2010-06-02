@@ -3,7 +3,7 @@
 /*
 
 DCFileDropControllerDropDelegate protocol
-- (void)fileDropUploadController:(DCFileDropController *)theController setState:(BOOL)visible;
+- (void)fileDropUploadController:(DCFileDropController)theController setState:(BOOL)visible;
 
 */
 

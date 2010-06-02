@@ -3,17 +3,17 @@
 /*
 
 DCFileUploadDelegate protocol
-- (void)fileUploadDidBegin:(DCFileUpload *)theController;
-- (void)fileUploadProgressDidChange:(DCFileUpload *)theController;
-- (void)fileUploadDidEnd:(DCFileUpload *)theController;
+- (void)fileUploadDidBegin:(DCFileUpload)theController;
+- (void)fileUploadProgressDidChange:(DCFileUpload)theController;
+- (void)fileUploadDidEnd:(DCFileUpload)theController;
 
 */
 
 @implementation DCFileUpload : CPObject {
-	CPString *name @accessors;
+	CPString name @accessors;
 	float progress @accessors;
 	id delegate @accessors;
-	CPURL *uploadURL @accessors;
+	CPURL uploadURL @accessors;
 
 	id file;
 	var xhr;
