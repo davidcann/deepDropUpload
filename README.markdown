@@ -51,3 +51,8 @@ And process it with this method:
 ## Attribution
 
 This technique is based on code from [CSS Ninja](http://www.thecssninja.com/javascript/gmail-upload).
+
+
+## License
+
+[MIT License](http://www.opensource.org/licenses/mit-license.php)
