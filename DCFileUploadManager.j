@@ -11,7 +11,7 @@ DCFileUploadManagerDelegate protocol
 SharedFileUploadManager = nil;
 
 @implementation DCFileUploadManager : CPObject {
-	CPArray *fileUploads @accessors;
+	CPArray fileUploads @accessors;
 	id delegate @accessors;
 	BOOL concurrent @accessors; // YES to make files upload at the same time.  NO (default) to upload one at a time.
 }
