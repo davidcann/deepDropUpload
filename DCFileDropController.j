@@ -118,6 +118,9 @@ DCFileDropableTargets = [ ];
 			[uploadManager fileUploadWithFile:files[i] uploadURL:uploadURL];
 		}
 	}
+
+    // now clear the input 
+    fileInput.value = nil;
 }
 
 @end
