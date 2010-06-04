@@ -15,7 +15,7 @@ DCFileDropableTargets = [ ];
 
 	DOMElement fileInput;
 	id dropDelegate;
-	CPURL *uploadURL;
+	CPURL uploadURL;
 	id uploadManager;
 }
 
