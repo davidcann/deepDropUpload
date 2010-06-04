@@ -45,7 +45,7 @@ DCFileUploadDelegate protocol
 	}, false);
 	
 	fileUpload.addEventListener("load", function(event) {
-		[self fileUploadDidEnd:xhr.responseText];
+		[self fileUploadDidEnd];
 	}, false);
 	
 	fileUpload.addEventListener("error", function(evt) {
