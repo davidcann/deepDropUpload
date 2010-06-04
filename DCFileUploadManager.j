@@ -76,6 +76,15 @@ SharedFileUploadManager = nil;
 		}
 	}
 	[self didChange];
+
+    if ([delegate respondsToSelector:@selector(fileUploadDidEnd:)])
+		[delegate fileUploadDidEnd:theFileUpload];
+}
+
+- (void)fileUpload:(DCFileUpload)anUpload didReceiveResponse:(CPString)aString
+{
+    if ([delegate respondsToSelector:@selector(fileUpload:didReceiveResponse:)])
+		[delegate fileUpload:self didReceiveResponse:aString];
 }
 
 - (void)didChange {

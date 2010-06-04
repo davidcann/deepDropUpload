@@ -34,6 +34,7 @@ DCFileUploadDelegate protocol
 
 - (void)processXHR {
 	xhr = new XMLHttpRequest();
+
 	var fileUpload = xhr.upload;
 	
 	fileUpload.addEventListener("progress", function(event) {
@@ -44,12 +45,17 @@ DCFileUploadDelegate protocol
 	}, false);
 	
 	fileUpload.addEventListener("load", function(event) {
-		[self fileUploadDidEnd];
+		[self fileUploadDidEnd:xhr.responseText];
 	}, false);
 	
 	fileUpload.addEventListener("error", function(evt) {
 		CPLog("error: " + evt.code);
 	}, false);
+
+    xhr.addEventListener("load", function(evt) {
+        if (xhr.responseText)
+            [self fileUploadDidReceiveResponse:xhr.responseText];
+    }, NO);
 
 	xhr.open("POST", [uploadURL absoluteURL]);
 	xhr.setRequestHeader("If-Modified-Since", "Mon, 26 Jul 1997 05:00:00 GMT");
@@ -77,11 +83,16 @@ DCFileUploadDelegate protocol
 	}
 }
 
-- (void)fileUploadDidEnd {
+- (void)fileUploadDidEnd{
 	isUploading = NO;
-	if ([delegate respondsToSelector:@selector(fileUploadDidEnd:)]) {
+	if ([delegate respondsToSelector:@selector(fileUploadDidEnd:)])
 		[delegate fileUploadDidEnd:self];
-	}
+}
+
+- (void)fileUploadDidReceiveResponse:(CPString)aResponse
+{
+    if ([delegate respondsToSelector:@selector(fileUpload:didReceiveResponse:)])
+		[delegate fileUpload:self didReceiveResponse:aResponse];
 }
 
 - (BOOL)isUploading {
