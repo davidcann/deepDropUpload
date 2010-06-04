@@ -7,10 +7,12 @@ DCFileDropControllerDropDelegate protocol
 
 */
 
+DCFileDropableTargets = [ ];
+
 @implementation DCFileDropController : CPObject {
 	CPView view @accessors;
 
-	var fileInput;
+	DOMElement fileInput;
 	id dropDelegate;
 	CPURL *uploadURL;
 	id uploadManager;
@@ -26,9 +28,16 @@ DCFileDropControllerDropDelegate protocol
 
 	[self setFileDropState:NO];
 
-	var theClass = [self class];
-	var dragEnterEventImplementation = class_getMethodImplementation(theClass, @selector(fileDraggingEntered:));
-	var dragEnterEventCallback = function (anEvent) { dragEnterEventImplementation(self, nil, anEvent); };
+	var theClass = [self class],
+	    dragEnterEventImplementation = class_getMethodImplementation(theClass, @selector(fileDraggingEntered:)),
+	    dragEnterEventCallback = function (anEvent) {anEvent.dataTransfer.dropEffect = "copy"; dragEnterEventImplementation(self, nil, anEvent); },
+        bodyBlockCallback = function(anEvent){if (![DCFileDropableTargets containsObject:anEvent.toElement]) {anEvent.dataTransfer.dropEffect = "none"; anEvent.preventDefault(); return NO;}else{return YES;}};
+
+    // this prevents the little plus sign from showing up when you drag over the body.
+    // Otherwise the user could be confused where they can drop the file and it would
+    // cause the browser to redirect to the file they just dropped. 
+    window.document.body.addEventListener("dragover", bodyBlockCallback, NO);
+
 	theView._DOMElement.addEventListener("dragenter", dragEnterEventCallback, NO);
 
 	fileInput = document.createElement("input");
@@ -41,6 +50,7 @@ DCFileDropControllerDropDelegate protocol
 	fileInput.style.opacity = "0";
 	fileInput.setAttribute("multiple",true);
 	[self setFileElementVisible:NO];
+    [DCFileDropableTargets addObject:fileInput];
 	theView._DOMElement.appendChild(fileInput);
 
 	var fileDroppedEventImplementation = class_getMethodImplementation(theClass, @selector(fileDropped:));
