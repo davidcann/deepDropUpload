@@ -11,10 +11,11 @@ DCFileDropableTargets = [ ];
 
 @implementation DCFileDropController : CPObject {
 	CPView view @accessors;
+    CPArray validFileTypes @accessors;
 
 	DOMElement fileInput;
 	id dropDelegate;
-	CPURL *uploadURL;
+	CPURL uploadURL;
 	id uploadManager;
 }
 
@@ -31,7 +32,7 @@ DCFileDropableTargets = [ ];
 	var theClass = [self class],
 	    dragEnterEventImplementation = class_getMethodImplementation(theClass, @selector(fileDraggingEntered:)),
 	    dragEnterEventCallback = function (anEvent) {anEvent.dataTransfer.dropEffect = "copy"; dragEnterEventImplementation(self, nil, anEvent); },
-        bodyBlockCallback = function(anEvent){if (![DCFileDropableTargets containsObject:anEvent.toElement]) {anEvent.dataTransfer.dropEffect = "none"; anEvent.preventDefault(); return NO;}else{return YES;}};
+        bodyBlockCallback = function(anEvent){if (![DCFileDropableTargets containsObject:anEvent.toElement] || ![self validateDraggedFiles:anEvent.dataTransfer.files]) {anEvent.dataTransfer.dropEffect = "none"; anEvent.preventDefault(); return NO;}else{return YES;}};
 
     // this prevents the little plus sign from showing up when you drag over the body.
     // Otherwise the user could be confused where they can drop the file and it would
@@ -62,6 +63,24 @@ DCFileDropableTargets = [ ];
 	fileInput.addEventListener("dragleave", dragExitEventCallback, NO);
 
 	return self;
+}
+
+- (BOOL)validateDraggedFiles:(FileList)files
+{
+    if (![validFileTypes count])
+        return YES;
+
+    for (var i = 0; i < files.length; i++)
+    {
+        // we really can only check the filename :(
+        var filename = files.item(i).fileName,
+            type = [filename pathExtension];
+
+        if (![validFileTypes containsObject:type])
+            return NO;
+    }
+
+    return YES;
 }
 
 - (void)setFileDropState:(BOOL)visible {
