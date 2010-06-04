@@ -114,9 +114,14 @@ DCFileDropableTargets = [ ];
 
 	var files = sender.target.files;
 	for(var i = 0, len = files.length; i < len; i++) {
-		if ([uploadManager respondsToSelector:@selector(fileUploadWithFile:uploadURL:)]) {
-			[uploadManager fileUploadWithFile:files[i] uploadURL:uploadURL];
-		}
+		if ([uploadManager respondsToSelector:@selector(fileUploadWithFile:uploadURL:)])
+        {
+			var upload = [uploadManager fileUploadWithFile:files[i] uploadURL:uploadURL];
+
+            if ([dropDelegate respondsToSelector:@selector(fileDropController:didBeginUpload:)])
+                [dropDelegate fileDropController:self didBeginUpload:upload];
+        }
+        
 	}
 
     // now clear the input 
