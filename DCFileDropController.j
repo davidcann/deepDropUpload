@@ -15,7 +15,7 @@ DCFileDropableTargets = [ ];
 
 	DOMElement fileInput;
 	id dropDelegate;
-	CPURL uploadURL;
+	CPURL *uploadURL;
 	id uploadManager;
 }
 
@@ -31,8 +31,8 @@ DCFileDropableTargets = [ ];
 
 	var theClass = [self class],
 	    dragEnterEventImplementation = class_getMethodImplementation(theClass, @selector(fileDraggingEntered:)),
-	    dragEnterEventCallback = function (anEvent) {anEvent.dataTransfer.dropEffect = "copy"; dragEnterEventImplementation(self, nil, anEvent); },
-        bodyBlockCallback = function(anEvent){if (![DCFileDropableTargets containsObject:anEvent.toElement] || ![self validateDraggedFiles:anEvent.dataTransfer.files]) {anEvent.dataTransfer.dropEffect = "none"; anEvent.preventDefault(); return NO;}else{return YES;}};
+	    dragEnterEventCallback = function (anEvent) {if (![self validateDraggedFiles:anEvent.dataTransfer.files]){return NO;}else{anEvent.dataTransfer.dropEffect = "copy"; dragEnterEventImplementation(self, nil, anEvent);}},
+        bodyBlockCallback = function(anEvent){if (![DCFileDropableTargets containsObject:anEvent.toElement] || ([DCFileDropableTargets containsObject:anEvent.toElement] && ![self validateDraggedFiles:anEvent.dataTransfer.files])) {anEvent.dataTransfer.dropEffect = "none"; anEvent.preventDefault(); return NO;}else{return YES;}};
 
     // this prevents the little plus sign from showing up when you drag over the body.
     // Otherwise the user could be confused where they can drop the file and it would
@@ -76,8 +76,7 @@ DCFileDropableTargets = [ ];
         var filename = files.item(i).fileName,
             type = [filename pathExtension];
 
-        if (![validFileTypes containsObject:type])
-            return NO;
+        return [validFileTypes containsObject:type];
     }
 
     return YES;
