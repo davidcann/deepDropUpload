@@ -45,6 +45,12 @@
 		var view = [[CPView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
 		[view setBackgroundColor:[CPColor lightGrayColor]];
 		[view addSubview:scrollView];
+
+		var fileDropUploadController = [[DCFileDropController alloc] 
+			initWithView:tableView
+			dropDelegate:self 
+			uploadURL:[CPURL URLWithString:@"upload.php"] 
+			uploadManager:[DCFileUploadManager sharedManager]];
 	}
 	return self;
 }
@@ -64,5 +70,15 @@
 	return [list count];
 }
 
+
+// ******************** DCFileDropControllerDropDelegate *********************
+
+- (void)fileDropUploadController:(DCFileDropController)theController setState:(BOOL)visible {
+	if (visible) {
+		[tableView setBackgroundColor:[CPColor greenColor]];
+	} else {
+		[tableView setBackgroundColor:[CPColor whiteColor]];
+	}
+}
 
 @end

@@ -20,6 +20,10 @@ DCFileDropableTargets = [ ];
 }
 
 - (id)initWithView:(CPView)theView dropDelegate:(id)theDropDelegate uploadURL:(CPURL)theUploadURL uploadManager:(id)theUploadManager {
+	return [self initWithView:theView dropDelegate:theDropDelegate uploadURL:theUploadURL uploadManager:theUploadManager insertAsFirstSubview:NO];
+}
+
+- (id)initWithView:(CPView)theView dropDelegate:(id)theDropDelegate uploadURL:(CPURL)theUploadURL uploadManager:(id)theUploadManager insertAsFirstSubview:(BOOL)shouldInsertAsFirstSubview {
 	self = [super init];
 
 	view = theView;
@@ -31,7 +35,7 @@ DCFileDropableTargets = [ ];
 
 	var theClass = [self class],
 	    dragEnterEventImplementation = class_getMethodImplementation(theClass, @selector(fileDraggingEntered:)),
-	    dragEnterEventCallback = function (anEvent) {if (![self validateDraggedFiles:anEvent.dataTransfer.files]){return NO;}else{anEvent.dataTransfer.dropEffect = "copy"; dragEnterEventImplementation(self, nil, anEvent);}},
+	    dragEnterEventCallback = function (anEvent) {if (![self validateDraggedFiles:anEvent.dataTransfer.files]){return NO;}else{anEvent.dataTransfer.dropEffect = "copy"; anEvent.stopPropagation(); dragEnterEventImplementation(self, nil, anEvent);}},
         bodyBlockCallback = function(anEvent){if (![DCFileDropableTargets containsObject:anEvent.toElement] || ([DCFileDropableTargets containsObject:anEvent.toElement] && ![self validateDraggedFiles:anEvent.dataTransfer.files])) {anEvent.dataTransfer.dropEffect = "none"; anEvent.preventDefault(); return NO;}else{return YES;}};
 
     // this prevents the little plus sign from showing up when you drag over the body.
@@ -52,7 +56,15 @@ DCFileDropableTargets = [ ];
 	fileInput.setAttribute("multiple",true);
 	[self setFileElementVisible:NO];
     [DCFileDropableTargets addObject:fileInput];
-	theView._DOMElement.appendChild(fileInput);
+	if (shouldInsertAsFirstSubview) {
+		if (theView._DOMElement.firstChild) {
+			theView._DOMElement.insertBefore(fileInput, theView._DOMElement.firstChild);
+		} else {
+			theView._DOMElement.appendChild(fileInput);
+		}
+	} else {
+		theView._DOMElement.appendChild(fileInput);
+	}
 
 	var fileDroppedEventImplementation = class_getMethodImplementation(theClass, @selector(fileDropped:));
 	var fileDroppedEventCallback = function (anEvent) { fileDroppedEventImplementation(self, nil, anEvent); };

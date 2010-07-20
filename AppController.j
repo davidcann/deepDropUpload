@@ -11,6 +11,7 @@
 @import "DCFileUploadManager.j"
 @import "DCFileUploadsPanel.j"
 @import "DCFileDropTableViewController.j"
+@import "DCFileDropCollectionViewController.j"
 
 @implementation AppController : CPObject {
 	
@@ -39,7 +40,7 @@
 	[contentView addSubview:button];
 
 	// drop view
-	var anyView = [[CPImageView alloc] initWithFrame:CGRectMake(50, 160, 200, 200)];
+	var anyView = [[CPImageView alloc] initWithFrame:CGRectMake(50, 140, 200, 200)];
 	[anyView setImage:[[CPImage alloc] initWithContentsOfFile:[[CPBundle mainBundle] pathForResource:@"upload.png"] size:CPSizeMake(200, 200)]];
 	[contentView addSubview:anyView];
 
@@ -56,8 +57,13 @@
 
 	// add the example drop table view
 	var dropTableViewController = [[DCFileDropTableViewController alloc] init];
-	[[dropTableViewController view] setFrame:CGRectMake(300, 150, 200, 300)];
+	[[dropTableViewController view] setFrame:CGRectMake(340, 150, 200, 300)];
 	[contentView addSubview:[dropTableViewController view]];
+
+	// add a collection view example
+	var dropCollectionViewController = [[DCFileDropCollectionViewController alloc] init];
+	[[dropCollectionViewController view] setFrame:CGRectMake(40, 370, 240, 150)];
+	[contentView addSubview:[dropCollectionViewController view]];
 
 	[theWindow orderFront:self];
 	[uploadsPanel orderFront:nil];
