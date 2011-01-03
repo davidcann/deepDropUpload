@@ -29,7 +29,7 @@ Apply a DCFileDropController to any CPView:
 
 If you want to change visual state of the view, you can do that with this dropDelegate method:
 
-	- (void)fileDropUploadController:(DCFileDropController *)theController setState:(BOOL)visible {
+	- (void)fileDropUploadController:(DCFileDropController)theController setState:(BOOL)visible {
 		if (visible) {
 			[theController.view setBackgroundColor:[CPColor colorWithRed:0.0 green:0.0 blue:1.0 alpha:0.2]];
 		} else {
@@ -43,7 +43,7 @@ If you want to display progress, you can set the DCFileUploadManager delegate:
 
 And process it with this method:
 
-	- (void)fileUploadManagerDidChange:(DCFileUploadManager *)theManager {
+	- (void)fileUploadManagerDidChange:(DCFileUploadManager)theManager {
 		var fileUploads = [theManager fileUploads];
 	}
 
